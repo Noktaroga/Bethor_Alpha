@@ -1,0 +1,22 @@
+{
+  "name": "calibracion-certificados",
+  "version": "0.1.0",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "concurrently \"npm:react\" \"npm:electron\"",
+    "react": "vite",
+    "electron": "ELECTRON_START_URL=http://localhost:5173 electron .",
+    "build": "tsc && vite build"
+  },
+  "dependencies": {
+    "electron": "^27.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "concurrently": "^8.0.0",
+    "vite": "^4.3.0"
+  }
+}
