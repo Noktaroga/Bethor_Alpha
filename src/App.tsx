@@ -3,8 +3,24 @@ import FormSection from './components/FormSection';
 import PDFPreview from './components/PDFPreview';
 import MenuBar from './components/MenuBar';
 
+interface FormData {
+  certificadoNo: string;
+  fecha: string;
+  cliente: string;
+  orden: string;
+  instrumento: string;
+  fabricante: string;
+}
+
 const App: React.FC = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<FormData>({
+    certificadoNo: '',
+    fecha: '',
+    cliente: '',
+    orden: '',
+    instrumento: '',
+    fabricante: '',
+  });
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -15,10 +31,12 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex h-full">
+    <div className="h-full flex flex-col">
       <MenuBar lastSaved={lastSaved} />
-      <FormSection data={data} onChange={setData} />
-      <PDFPreview data={data} />
+      <div className="flex flex-1">
+        <FormSection data={data} onChange={setData} />
+        <PDFPreview data={data} />
+      </div>
     </div>
   );
 };

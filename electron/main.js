@@ -5,16 +5,17 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-    },
     frame: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
   });
 
-  win.loadURL(
+  const startURL =
     process.env.ELECTRON_START_URL ||
-      `file://${path.join(__dirname, '../public/index.html')}`
-  );
+    `file://${path.join(__dirname, '../dist/index.html')}`;
+  win.loadURL(startURL);
 
   const template = [
     {
@@ -27,10 +28,16 @@ function createWindow() {
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 
-  ipcMain.on('window-control', (_, action) => {
-    if (action === 'minimize') win.minimize();
-    if (action === 'maximize') win.isMaximized() ? win.unmaximize() : win.maximize();
-    if (action === 'close') win.close();
+  ipcMain.on('minimize', () => {
+    win.minimize();
+  });
+
+  ipcMain.on('maximize', () => {
+    win.isMaximized() ? win.unmaximize() : win.maximize();
+  });
+
+  ipcMain.on('close', () => {
+    win.close();
   });
 }
 
