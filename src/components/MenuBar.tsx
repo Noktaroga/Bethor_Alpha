@@ -1,13 +1,14 @@
 import React from 'react';
-import { ipcRenderer } from 'electron';
 
 interface Props {
   lastSaved: Date | null;
 }
 
+const ipcRenderer = window.require?.('electron')?.ipcRenderer;
+
 const MenuBar: React.FC<Props> = ({ lastSaved }) => {
   const send = (channel: 'minimize' | 'maximize' | 'close') => {
-    ipcRenderer.send(channel);
+    ipcRenderer?.send(channel);
   };
 
   return (

@@ -1,5 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import App from './App';
 import './styles/tailwind.css';
-ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+console.log('✅ React está montando App.tsx');
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(React.StrictMode, null,
+    React.createElement(App, null)));

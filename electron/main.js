@@ -12,33 +12,29 @@ function createWindow() {
     },
   });
 
-  const startURL =
-    process.env.ELECTRON_START_URL ||
-    `file://${path.join(__dirname, '../dist/index.html')}`;
-  win.loadURL(startURL);
+  // Ruta al index.html compilado por Vite
+  const indexPath = path.join(__dirname, '../dist/index.html');
+  win.loadFile(indexPath);
 
+  // Abrir DevTools automáticamente
+  win.webContents.openDevTools();
+
+  // Menú básico
   const template = [
     {
       label: 'Archivo',
-      submenu: [
-        { role: 'quit', label: 'Salir' },
-      ],
+      submenu: [{ role: 'quit', label: 'Salir' }],
     },
   ];
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 
-  ipcMain.on('minimize', () => {
-    win.minimize();
-  });
-
-  ipcMain.on('maximize', () => {
-    win.isMaximized() ? win.unmaximize() : win.maximize();
-  });
-
-  ipcMain.on('close', () => {
-    win.close();
-  });
+  // Controles de ventana
+  ipcMain.on('minimize', () => win.minimize());
+  ipcMain.on('maximize', () =>
+    win.isMaximized() ? win.unmaximize() : win.maximize()
+  );
+  ipcMain.on('close', () => win.close());
 }
 
 app.whenReady().then(createWindow);
