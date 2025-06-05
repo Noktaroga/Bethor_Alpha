@@ -2,27 +2,7 @@ import React, { useState, useEffect } from 'react';
 import FormSection from './components/formSection';
 import PDFPreview from './components/PDFPreview';
 import MenuBar from './components/MenuBar';
-
-export interface FormData {
-    certificadoNo: string,
-    fecha: string,
-    cliente: string,
-    orden: string,
-    instrumento: string,
-    fabricante: string,
-    modelo: string,
-    exactitud: string,
-    condiciones: string,
-    ubicacion: string,
-    observaciones: string,
-    patronTipo: string,
-    patronCodigo: string,
-    patronClase: string,
-    fechaCertificacion: string,
-    patronFecha: string,
-    temperatura: string,
-    humedad: string,
-}
+import { FormData } from './components/formSection/types';
 
 const App: React.FC = () => {
   console.log('✅ App.tsx está en ejecución');
@@ -30,6 +10,7 @@ const App: React.FC = () => {
   const [data, setData] = useState<FormData>({
     certificadoNo: '',
     fecha: '',
+    fechaEmision: '',
     cliente: '',
     orden: '',
     instrumento: '',
@@ -42,10 +23,17 @@ const App: React.FC = () => {
     patronTipo: '',
     patronCodigo: '',
     patronClase: '',
+    patronCertificado: '',
     fechaCertificacion: '',
     patronFecha: '',
     temperatura: '',
     humedad: '',
+    tolerancia: 0,
+    rangoMin: 0,
+    rangoMax: 1600,
+    serie: '',
+    estado: '',
+    resultados: []
   });
 
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -58,15 +46,14 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100 text-gray-800">
+    <div className="h-screen flex flex-col bg-gray-50 text-gray-800 text-sm font-sans">
       <MenuBar lastSaved={lastSaved} />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden p-4 gap-4">
         <FormSection data={data} onChange={setData} />
         <PDFPreview data={data} />
       </div>
     </div>
   );
-
 };
 
 export default App;

@@ -4,6 +4,7 @@ import App from './App';
 import './styles/tailwind.css';
 
 console.log('✅ React está montando App.tsx');
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />

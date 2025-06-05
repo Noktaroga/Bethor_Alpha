@@ -7,6 +7,7 @@ const App = () => {
     const [data, setData] = useState({
         certificadoNo: '',
         fecha: '',
+        fechaEmision: '',
         cliente: '',
         orden: '',
         instrumento: '',
@@ -19,10 +20,17 @@ const App = () => {
         patronTipo: '',
         patronCodigo: '',
         patronClase: '',
+        patronCertificado: '',
         fechaCertificacion: '',
         patronFecha: '',
         temperatura: '',
         humedad: '',
+        tolerancia: 0,
+        rangoMin: 0,
+        rangoMax: 1600,
+        serie: '',
+        estado: '',
+        resultados: []
     });
     const [lastSaved, setLastSaved] = useState(null);
     useEffect(() => {
@@ -31,9 +39,9 @@ const App = () => {
         }, 5000);
         return () => clearInterval(interval);
     }, []);
-    return (React.createElement("div", { className: "h-screen flex flex-col bg-gray-100 text-gray-800" },
+    return (React.createElement("div", { className: "h-screen flex flex-col bg-gray-50 text-gray-800 text-sm font-sans" },
         React.createElement(MenuBar, { lastSaved: lastSaved }),
-        React.createElement("div", { className: "flex flex-1 overflow-hidden" },
+        React.createElement("div", { className: "flex flex-1 overflow-hidden p-4 gap-4" },
             React.createElement(FormSection, { data: data, onChange: setData }),
             React.createElement(PDFPreview, { data: data }))));
 };

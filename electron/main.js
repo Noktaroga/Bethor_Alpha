@@ -16,9 +16,6 @@ function createWindow() {
   const indexPath = path.join(__dirname, '../dist/index.html');
   win.loadFile(indexPath);
 
-  // Abrir DevTools automáticamente
-  win.webContents.openDevTools();
-
   // Menú básico
   const template = [
     {

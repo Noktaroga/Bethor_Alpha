@@ -1,7 +1,14 @@
 module.exports = {
-  content: ['./public/index.html', './src/**/*.{ts,tsx}'],
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}', // para que busque clases en todos tus archivos del proyecto React
+  ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'], // activa Inter si la usas en index.html
+      },
+    },
   },
   plugins: [],
 };
