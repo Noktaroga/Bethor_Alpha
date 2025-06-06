@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FormCard from './FormCard';
 import ResultadosTable from './ResultadosTable';
 const FormSection = ({ data, onChange }) => {
-    const [disabled, setDisabled] = useState(false);
     const handleChange = (field, value) => {
         onChange({ ...data, [field]: value });
     };
-    const handleLastKey = (e) => {
-        if (e.key === 'Tab' && !e.shiftKey) {
-            setDisabled(true);
+    const handleNumberChange = (field, value) => {
+        const num = parseInt(value);
+        if (!isNaN(num)) {
+            onChange({ ...data, [field]: num });
         }
     };
-    return (React.createElement("div", { className: `flex-1 p-6 overflow-y-auto space-y-6 bg-gray-50 ${disabled ? 'opacity-50 pointer-events-none' : ''}` },
+    return (React.createElement("div", { className: `flex-1 p-6 overflow-y-auto space-y-6 bg-gray-50 ` },
         React.createElement(FormCard, { title: "Informaci\u00F3n general", cols: 2, fields: [
                 { label: 'Certificado N°', field: 'certificadoNo' },
                 { label: 'Fecha de emisión', field: 'fechaEmision', type: 'date' },
@@ -29,6 +29,7 @@ const FormSection = ({ data, onChange }) => {
                 { label: 'Rango máximo', field: 'rangoMax' },
                 { label: 'N° Serie / Lote', field: 'serie' },
                 { label: 'Estado', field: 'estado' },
+                { label: 'Divisiones del rango', field: 'divisiones' },
             ], data: data, onChange: handleChange }),
         React.createElement(FormCard, { title: "Datos del patr\u00F3n", cols: 3, fields: [
                 { label: 'Tipo de Patrón', field: 'patronTipo' },
@@ -39,7 +40,7 @@ const FormSection = ({ data, onChange }) => {
                 { label: 'Fecha del Patrón', field: 'patronFecha', type: 'date' },
                 { label: 'Temperatura [°C]', field: 'temperatura' },
                 { label: 'Humedad relativa [%]', field: 'humedad' },
-            ], data: data, onChange: handleChange, lastKeyHandler: handleLastKey }),
-        React.createElement(ResultadosTable, { rangoMinimo: parseFloat(String(data.rangoMin)), rangoMaximo: parseFloat(String(data.rangoMax)), tolerancia: parseFloat(String(data.tolerancia)), resultados: data.resultados, onChange: (res) => onChange({ ...data, resultados: res }) })));
+            ], data: data, onChange: handleChange }),
+        React.createElement(ResultadosTable, { rangoMinimo: parseFloat(String(data.rangoMin)), rangoMaximo: parseFloat(String(data.rangoMax)), tolerancia: parseFloat(String(data.tolerancia)), divisiones: data.divisiones, resultados: data.resultados, onChange: (res) => onChange({ ...data, resultados: res }) })));
 };
 export default FormSection;

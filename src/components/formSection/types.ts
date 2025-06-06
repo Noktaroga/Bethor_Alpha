@@ -29,6 +29,7 @@ export interface FormData {
   tolerancia: number;
   serie: string;
   estado: string;
+  divisiones: number;
   resultados: Resultado[];
   rangoMin: number;
   rangoMax: number;

@@ -3,7 +3,7 @@ import { FormData } from './types';
 import FormCard from './FormCard';
 import ResultadosTable from './ResultadosTable';
 import { Resultado } from './types';
-
+import { TextField } from '@mui/material';
 
 interface Props {
   data: FormData;
@@ -11,20 +11,20 @@ interface Props {
 }
 
 const FormSection: React.FC<Props> = ({ data, onChange }) => {
-  const [disabled, setDisabled] = useState(false);
 
   const handleChange = (field: keyof FormData, value: string) => {
     onChange({ ...data, [field]: value });
   };
 
-  const handleLastKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Tab' && !e.shiftKey) {
-      setDisabled(true);
+  const handleNumberChange = (field: keyof FormData, value: string) => {
+    const num = parseInt(value);
+    if (!isNaN(num)) {
+      onChange({ ...data, [field]: num });
     }
   };
 
   return (
-    <div className={`flex-1 p-6 overflow-y-auto space-y-6 bg-gray-50 ${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
+    <div className={`flex-1 p-6 overflow-y-auto space-y-6 bg-gray-50 `}>
       <FormCard
         title="Información general"
         cols={2}
@@ -52,6 +52,7 @@ const FormSection: React.FC<Props> = ({ data, onChange }) => {
           { label: 'Rango máximo', field: 'rangoMax' },
           { label: 'N° Serie / Lote', field: 'serie' },
           { label: 'Estado', field: 'estado' },
+          { label: 'Divisiones del rango', field: 'divisiones' },
         ]}
         data={data}
         onChange={handleChange}
@@ -72,7 +73,6 @@ const FormSection: React.FC<Props> = ({ data, onChange }) => {
         ]}
         data={data}
         onChange={handleChange}
-        lastKeyHandler={handleLastKey}
       />
 
       {/* Sección resultados de medición */}
@@ -80,6 +80,7 @@ const FormSection: React.FC<Props> = ({ data, onChange }) => {
         rangoMinimo={parseFloat(String(data.rangoMin))}
         rangoMaximo={parseFloat(String(data.rangoMax))}
         tolerancia={parseFloat(String(data.tolerancia))}
+        divisiones={data.divisiones}
         resultados={data.resultados}
         onChange={(res: Resultado[]) => onChange({ ...data, resultados: res })}
       />

@@ -1,57 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { pdf, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-
-interface FormData {
-  certificadoNo: string;
-  fecha: string;
-  cliente: string;
-  orden: string;
-  instrumento: string;
-  fabricante: string;
-  modelo: string;
-  exactitud: string;
-  condiciones: string;
-}
+import { pdf } from '@react-pdf/renderer';
+import CertificadoPDF from './CertificadoPDF';
+import type { FormData } from './formSection/types';
 
 interface Props {
   data: FormData;
 }
-
-// Estilos PDF
-const styles = StyleSheet.create({
-  page: {
-    padding: 20,
-    fontSize: 12,
-    fontFamily: 'Helvetica',
-  },
-  section: {
-    marginBottom: 10,
-  },
-  label: {
-    fontWeight: 'bold',
-  },
-});
-
-// Documento PDF con los datos del formulario
-const PDFDocument: React.FC<{ data: FormData }> = ({ data }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      {Object.entries(data).map(([key, value]) => (
-        <View style={styles.section} key={key}>
-          <Text style={styles.label}>{key}: </Text>
-          <Text>{value}</Text>
-        </View>
-      ))}
-    </Page>
-  </Document>
-);
 
 const PDFPreview: React.FC<Props> = ({ data }) => {
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const generatePdf = async () => {
-      const instance = <PDFDocument data={data} />;
+      const instance = <CertificadoPDF data={data} />;
       const blob = await pdf(instance).toBlob();
       const url = URL.createObjectURL(blob);
       setBlobUrl(url);

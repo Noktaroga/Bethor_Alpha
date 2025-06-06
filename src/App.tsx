@@ -33,6 +33,7 @@ const App: React.FC = () => {
     rangoMax: 1600,
     serie: '',
     estado: '',
+    divisiones: 4,
     resultados: []
   });
 

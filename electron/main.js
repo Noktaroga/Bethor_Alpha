@@ -34,6 +34,7 @@ function createWindow() {
   ipcMain.on('close', () => win.close());
 }
 
+app.disableHardwareAcceleration();
 app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {

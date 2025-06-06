@@ -30,6 +30,7 @@ const App = () => {
         rangoMax: 1600,
         serie: '',
         estado: '',
+        divisiones: 4,
         resultados: []
     });
     const [lastSaved, setLastSaved] = useState(null);
