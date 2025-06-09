@@ -1,3 +1,5 @@
+// src/components/formSection/ResultadosTable.tsx
+
 import React, { useEffect, useState } from 'react';
 
 interface Resultado {
@@ -14,17 +16,19 @@ interface Props {
   divisiones: number;
   resultados: Resultado[];
   onChange: (res: Resultado[]) => void;
+  onDivisionesChange: (value: number) => void;
 }
 
 const ResultadosTable: React.FC<Props> = ({
   rangoMinimo,
   rangoMaximo,
   tolerancia,
+  divisiones,
   resultados,
-  onChange
+  onChange,
+  onDivisionesChange
 }) => {
   const [referencias, setReferencias] = useState<number[]>([]);
-  const [divisiones, setDivisiones] = useState<number>(4);
 
   useEffect(() => {
     const min = Number(rangoMinimo);
@@ -48,13 +52,27 @@ const ResultadosTable: React.FC<Props> = ({
     const vuelta = [...ida].reverse();
 
     setReferencias([...ida, ...vuelta]);
+
+    const nuevosResultados = [...ida, ...vuelta].map((ref, index) => {
+      const res = resultados[index];
+      return res
+        ? res
+        : {
+            referencia: ref,
+            dispositivo: 0,
+            diferencia: 0,
+            condicion: 'Rechazado' as 'Rechazado'
+          };
+    });
+
+    onChange(nuevosResultados);
   }, [rangoMinimo, rangoMaximo, divisiones]);
 
   const handleDispositivoChange = (index: number, value: string) => {
     const ref = referencias[index];
     const disp = parseFloat(value);
     const diff = disp - ref;
-    const condicion = Math.abs(diff) <= tolerancia ? 'Aprobado' : 'Rechazado';
+    const condicion: 'Aprobado' | 'Rechazado' = Math.abs(diff) <= tolerancia ? 'Aprobado' : 'Rechazado';
 
     const updated: Resultado[] = [...(resultados || [])];
     updated[index] = {
@@ -80,7 +98,7 @@ const ResultadosTable: React.FC<Props> = ({
           min={1}
           className="w-20 px-2 py-1 border rounded"
           value={divisiones}
-          onChange={(e) => setDivisiones(parseInt(e.target.value))}
+          onChange={(e) => onDivisionesChange(parseInt(e.target.value))}
         />
         <span className="ml-2 text-gray-500">partes</span>
       </div>
@@ -101,7 +119,7 @@ const ResultadosTable: React.FC<Props> = ({
               referencia: ref,
               dispositivo: 0,
               diferencia: 0,
-              condicion: 'Rechazado'
+              condicion: 'Rechazado' as 'Rechazado'
             };
             return (
               <tr key={index}>

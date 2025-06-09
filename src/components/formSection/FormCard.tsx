@@ -10,20 +10,22 @@ interface Field {
 
 interface Props {
   title: string;
-  fields: Field[];
-  data: FormData;
-  onChange: (field: keyof FormData, value: string) => void;
+  fields?: Field[]; // Ahora es opcional
+  data?: FormData;
+  onChange?: (field: keyof FormData, value: string) => void;
   lastKeyHandler?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   cols?: 1 | 2 | 3; // Número de columnas permitidas
+  children?: React.ReactNode; // ✅ Agregado para permitir contenido personalizado
 }
 
 const FormCard: React.FC<Props> = ({
   title,
-  fields,
-  data,
+  fields = [],
+  data = {} as FormData,
   onChange,
   lastKeyHandler,
-  cols = 2 // valor por defecto
+  cols = 2,
+  children
 }) => {
   const gridColsClass =
     cols === 1 ? 'grid-cols-1' :
@@ -36,18 +38,22 @@ const FormCard: React.FC<Props> = ({
         {title}
       </h2>
 
-      <div className={`grid ${gridColsClass} gap-4`}>
-        {fields.map(({ label, field, type = 'text' }, i) => (
-          <InputField
-            key={field}
-            label={label}
-            value={typeof data[field] === 'string' ? data[field] as string : ''}
-            onChange={(val) => onChange(field, val)}
-            type={type}
-            onKeyDown={i === fields.length - 1 && lastKeyHandler ? lastKeyHandler : undefined}
-          />
-        ))}
-      </div>
+      {children ? (
+        children
+      ) : (
+        <div className={`grid ${gridColsClass} gap-4`}>
+          {fields.map(({ label, field, type = 'text' }, i) => (
+            <InputField
+              key={field}
+              label={label}
+              value={typeof data[field] === 'string' ? data[field] as string : ''}
+              onChange={(val) => onChange?.(field, val)}
+              type={type}
+              onKeyDown={i === fields.length - 1 && lastKeyHandler ? lastKeyHandler : undefined}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+// src/components/formSection/FormSection.tsx
+
+import React from 'react';
 import { FormData } from './types';
 import FormCard from './FormCard';
 import ResultadosTable from './ResultadosTable';
 import { Resultado } from './types';
-import { TextField } from '@mui/material';
 
 interface Props {
   data: FormData;
@@ -11,22 +12,26 @@ interface Props {
 }
 
 const FormSection: React.FC<Props> = ({ data, onChange }) => {
-
   const handleChange = (field: keyof FormData, value: string) => {
     onChange({ ...data, [field]: value });
   };
 
   const handleNumberChange = (field: keyof FormData, value: string) => {
-    const num = parseInt(value);
+    const num = parseFloat(value);
     if (!isNaN(num)) {
       onChange({ ...data, [field]: num });
     }
   };
 
+  const handleDivisionesChange = (value: number) => {
+    onChange({ ...data, divisiones: value });
+  };
+
   return (
-    <div className={`flex-1 p-6 overflow-y-auto space-y-6 bg-gray-50 `}>
+    <div className="flex-1 p-6 overflow-y-auto space-y-6 bg-gray-50">
+      {/* Información general */}
       <FormCard
-        title="Información general"
+        title="INFORMACIÓN GENERAL"
         cols={2}
         fields={[
           { label: 'Certificado N°', field: 'certificadoNo' },
@@ -39,27 +44,39 @@ const FormSection: React.FC<Props> = ({ data, onChange }) => {
         onChange={handleChange}
       />
 
+      {/* Datos del instrumento calibrado */}
       <FormCard
-        title="Datos del instrumento calibrado"
-        cols={3}
+        title="DATOS DEL INSTRUMENTO CALIBRADO"
+        cols={2}
         fields={[
-          { label: 'Instrumento', field: 'instrumento' },
-          { label: 'Fabricante', field: 'fabricante' },
-          { label: 'Modelo / ID', field: 'modelo' },
-          { label: 'Exactitud', field: 'exactitud' },
-          { label: 'Tolerancia', field: 'tolerancia' },
           { label: 'Rango mínimo', field: 'rangoMin' },
           { label: 'Rango máximo', field: 'rangoMax' },
-          { label: 'N° Serie / Lote', field: 'serie' },
+          { label: 'Instrumento', field: 'instrumento' },
+          { label: 'Exactitud', field: 'exactitud' },
+          { label: 'Fabricante', field: 'fabricante' },
+          { label: 'Tolerancia', field: 'tolerancia' },
+          { label: 'Modelo / ID', field: 'modelo' },
           { label: 'Estado', field: 'estado' },
-          { label: 'Divisiones del rango', field: 'divisiones' },
+          { label: 'N° Serie / Lote', field: 'serie' },
         ]}
         data={data}
         onChange={handleChange}
       />
+      
+      {/* Resultados de medición */}
+      <ResultadosTable
+        rangoMinimo={parseFloat(String(data.rangoMin))}
+        rangoMaximo={parseFloat(String(data.rangoMax))}
+        tolerancia={parseFloat(String(data.tolerancia))}
+        divisiones={data.divisiones || 4}
+        resultados={data.resultados}
+        onChange={(res: Resultado[]) => onChange({ ...data, resultados: res })}
+        onDivisionesChange={handleDivisionesChange}
+      />
 
+      {/* Datos del patrón */}
       <FormCard
-        title="Datos del patrón"
+        title="DATOS DEL PATRÓN"
         cols={3}
         fields={[
           { label: 'Tipo de Patrón', field: 'patronTipo' },
@@ -74,17 +91,6 @@ const FormSection: React.FC<Props> = ({ data, onChange }) => {
         data={data}
         onChange={handleChange}
       />
-
-      {/* Sección resultados de medición */}
-      <ResultadosTable
-        rangoMinimo={parseFloat(String(data.rangoMin))}
-        rangoMaximo={parseFloat(String(data.rangoMax))}
-        tolerancia={parseFloat(String(data.tolerancia))}
-        divisiones={data.divisiones}
-        resultados={data.resultados}
-        onChange={(res: Resultado[]) => onChange({ ...data, resultados: res })}
-      />
-
     </div>
   );
 };

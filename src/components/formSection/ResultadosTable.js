@@ -1,7 +1,7 @@
+// src/components/formSection/ResultadosTable.tsx
 import React, { useEffect, useState } from 'react';
-const ResultadosTable = ({ rangoMinimo, rangoMaximo, tolerancia, resultados, onChange }) => {
+const ResultadosTable = ({ rangoMinimo, rangoMaximo, tolerancia, divisiones, resultados, onChange, onDivisionesChange }) => {
     const [referencias, setReferencias] = useState([]);
-    const [divisiones, setDivisiones] = useState(4);
     useEffect(() => {
         const min = Number(rangoMinimo);
         const max = Number(rangoMaximo);
@@ -17,6 +17,18 @@ const ResultadosTable = ({ rangoMinimo, rangoMaximo, tolerancia, resultados, onC
         }
         const vuelta = [...ida].reverse();
         setReferencias([...ida, ...vuelta]);
+        const nuevosResultados = [...ida, ...vuelta].map((ref, index) => {
+            const res = resultados[index];
+            return res
+                ? res
+                : {
+                    referencia: ref,
+                    dispositivo: 0,
+                    diferencia: 0,
+                    condicion: 'Rechazado'
+                };
+        });
+        onChange(nuevosResultados);
     }, [rangoMinimo, rangoMaximo, divisiones]);
     const handleDispositivoChange = (index, value) => {
         const ref = referencias[index];
@@ -36,7 +48,7 @@ const ResultadosTable = ({ rangoMinimo, rangoMaximo, tolerancia, resultados, onC
         React.createElement("h2", { className: "text-md font-semibold text-gray-700 border-b pb-2 mb-4 uppercase tracking-wide" }, "Resultados de medici\u00F3n"),
         React.createElement("div", { className: "mb-4" },
             React.createElement("label", { className: "font-medium text-gray-700 mr-2" }, "Dividir rango en:"),
-            React.createElement("input", { type: "number", min: 1, className: "w-20 px-2 py-1 border rounded", value: divisiones, onChange: (e) => setDivisiones(parseInt(e.target.value)) }),
+            React.createElement("input", { type: "number", min: 1, className: "w-20 px-2 py-1 border rounded", value: divisiones, onChange: (e) => onDivisionesChange(parseInt(e.target.value)) }),
             React.createElement("span", { className: "ml-2 text-gray-500" }, "partes")),
         React.createElement("table", { className: "w-full text-sm text-left border border-gray-300" },
             React.createElement("thead", { className: "bg-gray-100 text-gray-700" },
